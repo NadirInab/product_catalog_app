@@ -1,5 +1,5 @@
 
-export interface product {
+interface Product {
     id: number, 
     title: string, 
     price: number, 
@@ -11,3 +11,5 @@ export interface product {
         count: number
       }
 }
+
+// export default Product ;

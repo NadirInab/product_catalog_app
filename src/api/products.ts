@@ -1,9 +1,16 @@
-import React from 'react'
+import axios from 'axios';
+import Product from '@/types/Product';
 
-function Products() {
-  return (
-    <div>Products</div>
-  )
-}
 
-export default Products
+export const fetchProducts = async (): Promise<Product[]> => {
+  const response = await axios.get('https://fakestoreapi.com/products');
+
+  console.log(response);
+  return response.data;
+};
+
+export const fetchCategories = async (): Promise<string[]> => {
+  const response = await axios.get('https://fakestoreapi.com/products/categories');
+  console.log(response.data);
+  return response.data;
+};
