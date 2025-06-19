@@ -10,3 +10,5 @@ export type Product = {
     count: number;
   };
 }
+
+export type favorites = Record<number, boolean> ;
