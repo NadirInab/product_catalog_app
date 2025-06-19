@@ -1,42 +1,78 @@
-import { useState } from 'react'
-// import fetchProducts from '../api/fetchProducts'
-import {fetchProducts, fetchCategries} from './api/products.ts' ;
-import './App.css'
+import { useState } from 'react';
+import { ProductCard } from './components/ProductCard';
+import { useProducts } from './hooks/useProduct';
+import type { Product } from './types/Product';
 
 function App() {
-  const [count, setCount] = useState(0)
-  const [data, setData] = useState(["asdsfsf"]) ;
+  const { products, categories } = useProducts();
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [favorites, setFavorites] = useState<Record<number, boolean>>({});
+  const [searchTerm, setSearchTerm] = useState('');
 
+  const getFilteredProducts = (): Product[] => {
+    if (searchTerm.trim()) {
+      return products.filter(p =>
+        p.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
 
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const [productsData, categoriesData] = await Promise.all([
-          fetchProducts(),
-          fetchCategories()
-        ]);
-        setProducts(productsData);
-        setCategories(['all', ...categoriesData]);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load data');
-      } finally {
-        setLoading(false);
-      }
-    };
+    if (selectedCategory !== 'all') {
+      return products.filter(p => p.category === selectedCategory);
+    }
 
-    loadData();
-  }, []);
+    return products;
+  };
+
+  const filteredProducts = getFilteredProducts();
+
+  const toggleFavorite = (id: number) => {
+    setFavorites(prev => ({ ...prev, [id]: !prev[id] }));
+  };
+
   return (
-    <>
-  <h1>{data} </h1>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        </div>
-    </>
-  )
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-2xl font-bold text-center mb-8">Products Shop</h1>
+      
+      {/* Search Input */}
+      <div className="flex justify-center mb-4">
+        <input
+          type="text"
+          placeholder="Search products..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="border border-gray-300 rounded-md px-4 py-2 w-full max-w-md"
+        />
+      </div>
+
+      {/* Category Dropdown */}
+      <div className="flex justify-center mb-6">
+        <select
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}
+          className="border border-gray-300 rounded-md px-4 py-2"
+        >
+          <option value="all">All Categories</option>
+          {categories.map(category => (
+            <option key={category} value={category}>
+              {category.charAt(0).toUpperCase() + category.slice(1)}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Product Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {filteredProducts.map(product => (
+          <ProductCard
+            key={product.id}
+            product={product}
+            isFavorite={!!favorites[product.id]}
+            onToggleFavorite={toggleFavorite}
+          />
+        ))}
+      </div>
+    </div>
+  );
 }
 
-export default App
+export default App;
