@@ -1,54 +1,95 @@
-# React + TypeScript + Vite
+# **Product Catalog App - Technical Explanation**
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a **React + TypeScript** product catalog app that fetches data from the [FakeStoreAPI](https://fakestoreapi.com) and displays products in a responsive grid.  
 
-Currently, two official plugins are available:
+## **Features Implemented**
+✅ **Fetch & Display Products**  
+✅ **Category Filtering** (Dropdown)  
+✅ **Favorite Toggle** (Local State)  
+✅ **Responsive Design** (Mobile & Desktop)  
+✅ **Loading & Error States**  
+✅ **TypeScript for Type Safety**  
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## **Key Components & Structure**
+### **1. `useProducts` Custom Hook**
+- **What it does**:  
+  - Fetches products & categories from the API  
+  - Manages `loading` and `error` states  
+  - Returns clean data for the UI  
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Why it's useful**:  
+  - Separates API logic from UI  
+  - Reusable across components  
+  - Handles errors gracefully  
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+### **2. `ProductCard` Component**
+- **What it does**:  
+  - Displays product image, title, price, and category  
+  - Allows favoriting/unfavoriting products (❤️)  
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- **Props it accepts**:  
+  - `product` (object with product details)  
+  - `isFavorite` (boolean)  
+  - `onToggleFavorite` (function to toggle favorite state)  
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### **3. `App` Component (Main Logic)**
+- **What it does**:  
+  - Uses `useProducts` to fetch data  
+  - Manages **category filtering** (`selectedCategory` state)  
+  - Tracks **favorites** (`favorites` state)  
+  - Renders loading/error/product grid  
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+- **Key Features**:  
+  - **Filtering**: Dropdown to filter by category (`all`, `electronics`, `jewelery`, etc.)  
+  - **Favorites**: Click the heart icon to save favorites (stored in local state)  
+  - **Responsive Grid**: Adapts to different screen sizes  
+
+---
+
+## **How the App Works**
+1. **On Load**:
+   - Fetches products & categories from the API  
+   - Shows a loading spinner while waiting  
+   - If an error occurs, displays an error message  
+
+2. **User Interactions**:
+   - **Filtering**:  
+     - Select a category from the dropdown  
+     - The grid updates to show only matching products  
+   - **Favorites**:  
+     - Click the heart icon (🤍 → ❤️)  
+     - Favorites persist while using the app (but reset on refresh)  
+
+3. **Responsive Behavior**:
+   - **Desktop**: 4 columns  
+   - **Tablet**: 3 columns  
+   - **Mobile**: 2 columns  
+
+---
+
+## **Technical Choices**
+- **TypeScript**: Ensures type safety & better developer experience  
+- **Tailwind CSS**: Keeps styling simple & responsive  
+- **Custom Hook (`useProducts`)**: Improves code organization & reusability  
+- **Axios**: For clean API requests (instead of `fetch`)  
+
+---
+
+## **Possible Improvements**
+🔹 **Add Search Functionality** (Filter by product name)  
+🔹 **Persist Favorites** (Use `localStorage` or a state manager)  
+🔹 **Pagination/Lazy Loading** (For better performance with many products)  
+🔹 **Unit Tests** (For reliability)  
+
+---
+
+## **Final Notes**
+This app demonstrates:
+✔ **Clean component structure**  
+✔ **Efficient data fetching**  
+✔ **User-friendly UI**  
+✔ **Responsive design**  
+
+It follows **React best practices** while keeping the code simple and maintainable. 🚀
