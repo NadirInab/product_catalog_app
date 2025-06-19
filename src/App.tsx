@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ProductCard } from './components/ProductCard';
 import { useProducts } from './hooks/useProduct';
-import type { Product } from './types/Product';
+// import type { Product } from './types/Product';
 import type { favorites } from './types/Product';
 
 function App() {

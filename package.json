@@ -1,13 +1,14 @@
 {
-  "name": "product_catalog_app",
+  "name": "product-catalog",
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "scripts": {
+   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "npm run build && surge ./dist --domain https://products-catalog-app.surge.sh"
   },
   "dependencies": {
     "axios": "^1.10.0",
