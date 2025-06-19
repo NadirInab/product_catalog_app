@@ -1,5 +1,7 @@
 import axios from 'axios';
-import Product from '@/types/Product';
+// import {Product} from '../types/Product.ts';
+import type { Product } from '../types/Product';
+
 
 
 export const fetchProducts = async (): Promise<Product[]> => {
