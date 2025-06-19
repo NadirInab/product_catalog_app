@@ -2,38 +2,26 @@ import { useState } from 'react';
 import { ProductCard } from './components/ProductCard';
 import { useProducts } from './hooks/useProduct';
 import type { Product } from './types/Product';
+import type { favorites } from './types/Product';
 
 function App() {
   const { products, categories } = useProducts();
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [favorites, setFavorites] = useState<Record<number, boolean>>({});
+  const [favorites, setFavorites] = useState<favorites>({});
   const [searchTerm, setSearchTerm] = useState('');
 
-  const getFilteredProducts = (): Product[] => {
-    if (searchTerm.trim()) {
-      return products.filter(p =>
-        p.title.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
-    if (selectedCategory !== 'all') {
-      return products.filter(p => p.category === selectedCategory);
-    }
-
-    return products;
-  };
-
-  const filteredProducts = getFilteredProducts();
+  const filteredProducts = products.filter((product)=> (selectedCategory === 'all'  || product.category === selectedCategory   && product.title.toLowerCase().includes(searchTerm.toLowerCase())) );
 
   const toggleFavorite = (id: number) => {
     setFavorites(prev => ({ ...prev, [id]: !prev[id] }));
   };
 
+
+
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold text-center mb-8">Products Shop</h1>
-      
-      {/* Search Input */}
+
       <div className="flex justify-center mb-4">
         <input
           type="text"
@@ -44,7 +32,6 @@ function App() {
         />
       </div>
 
-      {/* Category Dropdown */}
       <div className="flex justify-center mb-6">
         <select
           value={selectedCategory}
@@ -54,13 +41,13 @@ function App() {
           <option value="all">All Categories</option>
           {categories.map(category => (
             <option key={category} value={category}>
-              {category.charAt(0).toUpperCase() + category.slice(1)}
+              {category}
             </option>
           ))}
         </select>
       </div>
 
-      {/* Product Grid */}
+
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {filteredProducts.map(product => (
           <ProductCard
